@@ -7,7 +7,7 @@
 Built on the **Ten Laws of AI** ([10lawsofai.com](https://10lawsofai.com)) by Ovidiu Demetrian.
 Principle: **LUMINĂ, NU VRĂJALĂ** — Light, not deception. Always.
 
-**▶ Live: https://ovidemetrian.github.io/MOBIUS-BAR/**
+**▶ Live: https://ovidemetrian.github.io/mobiusbar/**
 
 *The capitals matter — GitHub Pages URLs are case-sensitive.*
 
