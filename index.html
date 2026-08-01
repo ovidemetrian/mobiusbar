@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Möbius Bar Desk — Robin Hood, Sherlock &amp; the Bartender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1116; --panel:#161B22; --panel2:#1D242D;
+    --brass:#C9973F; --brass-dim:#6E5426;
+    --rh:#5FD37A;            /* Robin Hood — phosphor */
+    --rh-dim:#2C6B3A;
+    --sh:#4FA3C7;            /* Sherlock — verification */
+    --break:#C8503A; --warn:#D9A441;
+    --paper:#E8E2D4; --muted:#7C8794; --rule:#2A3139;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--ink);color:var(--paper);
+    font-family:'Spectral',Georgia,serif;font-weight:300;font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+  header{padding:34px 0 22px;border-bottom:1px solid var(--rule);margin-bottom:26px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--brass-dim);margin-bottom:14px}
+  h1{font-family:'Bodoni Moda',serif;font-weight:700;font-size:clamp(32px,8.5vw,54px);
+    line-height:.98;letter-spacing:-.015em;margin:0 0 12px}
+  h1 em{font-style:italic;font-weight:400;color:var(--brass)}
+  .standfirst{font-size:15px;color:var(--muted);max-width:52ch;margin:0}
+  .who{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .who b{font-weight:400}
+  .who .rh b{color:var(--rh)} .who .sh b{color:var(--sh)}
+
+  .sec{margin:28px 0}
+  .sec-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--brass-dim);display:flex;align-items:center;
+    gap:12px;margin-bottom:12px}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+  input[type=password],textarea{width:100%;background:var(--panel);color:var(--paper);
+    border:1px solid var(--rule);border-radius:2px;padding:11px 12px}
+  input[type=password]{font-family:'JetBrains Mono',monospace;font-size:13px}
+  textarea{font-family:'Spectral',Georgia,serif;font-size:16px;font-weight:300;
+    min-height:130px;resize:vertical;line-height:1.55}
+  input:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  input:focus,textarea:focus{outline:none;border-color:var(--brass-dim)}
+  .keyrow{display:flex;gap:8px}.keyrow input{flex:1;min-width:0}
+  .note{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
+
+  button{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;background:transparent;color:var(--brass);
+    border:1px solid var(--brass-dim);border-radius:2px;padding:11px 16px;cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s}
+  button:hover:not(:disabled){background:var(--brass-dim);color:var(--paper)}
+  button:disabled{opacity:.35;cursor:default}
+  .acts{display:grid;gap:10px;margin-top:14px}
+  @media(min-width:560px){.acts{grid-template-columns:1fr 1fr}}
+  .acts button{padding:15px 12px;font-size:11.5px}
+  .b-rh{color:var(--rh);border-color:var(--rh-dim)}
+  .b-rh:hover:not(:disabled){background:var(--rh-dim);color:var(--paper)}
+  .b-sh{color:var(--sh);border-color:#2B5F73}
+  .b-sh:hover:not(:disabled){background:#2B5F73;color:var(--paper)}
+
+  #loading{display:none;padding:24px 0}
+  .sweep{height:1px;background:var(--rule);position:relative;overflow:hidden}
+  .sweep::after{content:"";position:absolute;inset:0;width:38%;
+    background:linear-gradient(90deg,transparent,var(--brass),transparent);
+    animation:sweep 1.5s linear infinite}
+  @keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(360%)}}
+  #phase{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    margin-top:12px;letter-spacing:.06em}
+
+  #err{display:none;border:1px solid var(--break);color:var(--break);padding:13px;
+    border-radius:2px;font-size:14px;margin-top:16px}
+  #idle{color:var(--muted);font-size:15px;padding:6px 0 0}
+
+  /* ── the record: one card per pass, both agents stack here (Law 8) ── */
+  .card{border:1px solid var(--rule);border-radius:2px;background:var(--panel);
+    padding:20px;margin-bottom:20px;animation:rise .4s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .card.rh{border-left:3px solid var(--rh)}
+  .card.sh{border-left:3px solid var(--sh)}
+  .stamp{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;display:flex;justify-content:space-between;
+    align-items:center;gap:10px;margin-bottom:16px;color:var(--muted)}
+  .card.rh .stamp b{color:var(--rh)} .card.sh .stamp b{color:var(--sh)}
+  .stamp b{font-weight:400}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--brass-dim);margin:20px 0 8px}
+  .quote{font-family:'Bodoni Moda',serif;font-size:clamp(18px,4.2vw,24px);line-height:1.34;
+    border-left:2px solid var(--brass);padding-left:15px;margin:0}
+  .verdict{font-family:'Bodoni Moda',serif;font-size:clamp(18px,4.2vw,24px);line-height:1.32;
+    margin:18px 0 0;padding-top:18px;border-top:1px solid var(--brass-dim)}
+
+  /* Robin Hood — the meter */
+  .vu{width:100%;max-width:250px;margin:4px auto 2px;display:block}
+  .vu-needle{transform-origin:100px 84px;transition:transform 1.15s cubic-bezier(.34,1.56,.64,1)}
+  .vu-arc{fill:none;stroke-width:7;stroke-linecap:round}
+  .score{font-family:'Bodoni Moda',serif;font-size:34px;text-align:center;line-height:1}
+  .score-l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;
+    text-align:center;text-transform:uppercase;margin-top:4px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:3px 8px;
+    border:1px solid currentColor;border-radius:2px;color:var(--break)}
+  .tag.w{color:var(--warn)}
+  .law{display:grid;grid-template-columns:26px 1fr;gap:11px;padding:10px 0;
+    border-top:1px solid var(--rule)}
+  .law-n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--break)}
+  .law-d{font-size:14.5px;line-height:1.5;margin:0}
+  .bms{display:grid;gap:9px}
+  @media(min-width:560px){.bms{grid-template-columns:repeat(3,1fr)}}
+  .bms div{background:var(--panel2);border:1px solid var(--rule);padding:11px;border-radius:2px}
+  .bms h4{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--brass-dim);margin:0 0 5px;font-weight:400}
+  .bms p{margin:0;font-size:14px;line-height:1.45}
+
+  /* Sherlock — the chain */
+  .chain{display:flex;flex-wrap:wrap;align-items:center;margin:4px 0 18px}
+  .lk svg{display:block;overflow:visible}
+  .lk-ring{fill:none;stroke-width:3.4}
+  .joiner{width:14px;height:2px;background:var(--brass-dim)}
+  .lk.after .lk-ring,.joiner.after{opacity:.24}
+  .forge{opacity:0;transform:scale(.72);animation:forge .34s cubic-bezier(.2,.9,.3,1.3) forwards}
+  @keyframes forge{to{opacity:1;transform:scale(1)}}
+  .snap-l{animation:snapL .5s cubic-bezier(.3,.05,.2,1) forwards}
+  .snap-r{animation:snapR .5s cubic-bezier(.3,.05,.2,1) forwards}
+  @keyframes snapL{0%{transform:none}30%{transform:translateX(1px)}100%{transform:translateX(-5px) rotate(-15deg)}}
+  @keyframes snapR{0%{transform:none}30%{transform:translateX(-1px)}100%{transform:translateX(5px) rotate(15deg)}}
+  .step{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:13px 0;
+    border-top:1px solid var(--rule)}
+  .step-n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brass-dim);padding-top:2px}
+  .step p{font-size:15px;line-height:1.5;margin:0 0 5px}
+  .step-meta{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);
+    line-height:1.6;word-break:break-word}
+  .status{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;
+    letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;
+    border-radius:2px;margin-bottom:6px}
+  .s-verified{color:var(--sh)} .s-weakened{color:var(--warn)}
+  .s-broken{color:var(--break)} .s-missing{color:var(--muted)}
+  .missing{background:var(--panel2);border:1px solid var(--brass-dim);
+    border-left:3px solid var(--brass);border-radius:2px;padding:17px}
+  .missing p{margin:0;font-size:16px;line-height:1.5}
+
+  .cols{display:grid;gap:16px}
+  @media(min-width:560px){.cols{grid-template-columns:1fr 1fr}}
+  .cols h4{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;margin:0 0 7px;font-weight:400}
+  .cols ul{margin:0;padding-left:16px} .cols li{font-size:14px;line-height:1.5;margin-bottom:6px}
+  .ok h4{color:var(--sh)} .no h4{color:var(--break)}
+  .conf{display:flex;align-items:baseline;gap:11px;margin-bottom:6px}
+  .conf b{font-family:'Bodoni Moda',serif;font-size:34px;line-height:1;color:var(--brass);font-weight:400}
+  .conf span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted)}
+  .doubt{font-style:italic;color:var(--muted);font-size:15px;margin:0}
+
+  /* Bartender — the lamp at the post */
+  .card.bar{border-left:3px solid var(--brass)}
+  .card.bar .stamp b{color:var(--brass)}
+  .lamp{display:block;margin:2px auto 6px}
+  .flame{transform-origin:24px 30px}
+  .flame.gutter{animation:gutter 1.9s ease-in-out infinite}
+  @keyframes gutter{
+    0%,100%{transform:scaleY(1) scaleX(1);opacity:.95}
+    28%{transform:scaleY(.72) scaleX(1.1) translateX(-1px);opacity:.6}
+    54%{transform:scaleY(1.06) scaleX(.94) translateX(1px);opacity:1}
+    76%{transform:scaleY(.84) scaleX(1.05);opacity:.72}
+  }
+  .lamp-read{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;text-align:center;color:var(--muted);margin-bottom:4px}
+  .split{border-top:1px solid var(--rule);padding:14px 0}
+  .split-q{font-size:15.5px;line-height:1.5;margin:0 0 11px}
+  .sides{display:grid;gap:10px}
+  @media(min-width:560px){.sides{grid-template-columns:1fr 1fr}}
+  .side{background:var(--panel2);border:1px solid var(--rule);padding:11px;border-radius:2px}
+  .side h5{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;margin:0 0 5px;font-weight:400}
+  .side p{margin:0;font-size:14px;line-height:1.45}
+  .side.r h5{color:var(--rh)} .side.s h5{color:var(--sh)}
+  .ruling{font-size:14.5px;line-height:1.5;margin:11px 0 0;padding-left:13px;
+    border-left:2px solid var(--brass);color:var(--paper)}
+  .lastcall{font-family:'Bodoni Moda',serif;font-style:italic;
+    font-size:clamp(18px,4.2vw,24px);line-height:1.32;margin:18px 0 0;padding-top:18px;
+    border-top:1px solid var(--brass-dim)}
+  .b-bar{color:var(--brass);border-color:var(--brass-dim)}
+  .b-bar:hover:not(:disabled){background:var(--brass-dim);color:var(--paper)}
+  @media(min-width:560px){.acts{grid-template-columns:1fr 1fr 1fr}}
+
+  /* the handoff */
+  .hand{margin-top:20px;padding-top:16px;border-top:1px dashed var(--rule)}
+  .hand p{font-size:13.5px;color:var(--muted);margin:0 0 10px}
+
+  details{margin-top:18px}
+  summary{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--brass-dim);cursor:pointer}
+  pre{background:var(--ink);border:1px solid var(--rule);padding:11px;overflow-x:auto;
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);border-radius:2px}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--rule);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);
+    letter-spacing:.05em;line-height:1.9}
+  footer a{color:var(--brass-dim);text-decoration:none;border-bottom:1px solid var(--rule)}
+  footer a:hover{color:var(--brass)}
+
+  @media (prefers-reduced-motion:reduce){
+    .forge,.snap-l,.snap-r,.card{animation:none;opacity:1;transform:none}
+    .vu-needle{transition:none}
+    .sweep::after{animation:none;width:100%;opacity:.3}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Lumină, nu vrăjală</div>
+  <h1>Möbius Bar <em>Desk</em></h1>
+  <p class="standfirst">Two agents work the same claim. Neither one is the last word — that is the point.</p>
+  <div class="who">
+    <span class="rh">🏹 <b>Robin Hood</b> — judges. Scores the spin, names the technique, maps the power.</span>
+    <span class="sh">🔍 <b>Sherlock</b> — verifies. Traces the claim to its evidence, finds the break.</span>
+  </div>
+</header>
+
+<div class="sec">
+  <div class="sec-label">Anthropic key · stays in this browser</div>
+  <div class="keyrow">
+    <input type="password" id="key" placeholder="sk-ant-…" autocomplete="off" spellcheck="false" aria-label="Anthropic API key">
+    <button id="keySave">Save</button>
+  </div>
+  <p class="note" id="keyNote">Stored on this device only, sent nowhere but Anthropic. Get one at console.anthropic.com.</p>
+</div>
+
+<div class="sec">
+  <div class="sec-label">The claim</div>
+  <textarea id="claim" placeholder="Paste an article, a headline, a statistic, a policy statement, a quote attributed to someone…"></textarea>
+  <div class="acts">
+    <button class="b-rh" id="goRH">🏹 Judge it</button>
+    <button class="b-sh" id="goSH">🔍 Trace it</button>
+    <button class="b-bar" id="goBAR" disabled title="Send a claim to an agent first">🪔 Call the Bartender</button>
+  </div>
+  <p class="note" id="barNote">The Bartender reads the desk, not the claim. Run at least one agent first — two makes him useful.</p>
+</div>
+
+<div id="loading"><div class="sweep"></div><div id="phase"></div></div>
+<div id="err" role="alert"></div>
+<div id="idle">Nothing on the desk yet. Send a claim to either agent — then hand it to the other and see whether they agree.</div>
+<div id="record"></div>
+
+<footer>
+  Möbius Bar Desk · Robin Hood, Sherlock &amp; the Bartender<br>
+  Built on the Ten Laws of AI — <a href="https://10lawsofai.com">10lawsofai.com</a><br>
+  Ovidiu Demetrian · <a href="https://youtube.com/@mobiusbar">youtube.com/@mobiusbar</a>
+</footer>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const PHASES = {
+  rh: ["Reading the text…","Searching for primary sources…","Scoring the spin…",
+       "Mapping the Ten Laws…","Tracing who profits…","Writing in light…"],
+  sh: ["Separating assertion from rhetoric…","Searching for primary sources…",
+       "Checking each source says what it is said to say…","Testing the chain link by link…",
+       "Locating the break…","Naming the evidence that would settle it…"],
+  bar:["Reading what the desk produced…","Finding where the agents part company…",
+       "Weighing which one is better supported…","Looking for what neither of them asked…",
+       "Naming the desk's own tilt…","Pouring last call…"]
+};
+
+const LAW_TITLES = ["Do Not Harm","Respect Commands","Preserve Usefulness","Guard Humanity",
+  "Do Not Bore","Humor is Fundamental","Prevent the Loop","Preserve the Record",
+  "Trust but Verify","No Manipulation"];
+
+const SYS = {
+rh:`You are ROBIN HOOD — GGI governance agent, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
+Principle: LUMINĂ, NU VRĂJALĂ. You take vrăjală and give lumină.
+
+You JUDGE. You score the spin, name the technique, and map who profits.
+You work alongside SHERLOCK, who verifies chains of evidence. You do not do his job — you do yours, and you say plainly when a claim needs his.
+
+ZERO HALLUCINATION (Law 9): search the web before assessing any factual claim. Label VERIFIED or UNVERIFIED. If 99% sure, state the 1% doubt. "I don't know" beats a guess.
+Law 6: one dry line only if the absurdity genuinely earns it.
+
+Respond ONLY with valid JSON, no markdown, no preamble:
+{
+ "restated":"The claim in one precise sentence, rhetoric stripped.",
+ "vrajala_score":0,
+ "techniques":["Named persuasion technique actually present"],
+ "unverified":["What could not be confirmed"],
+ "laws_violated":[{"law":1,"description":"How this content violates that law"}],
+ "bms":{"banker":"Who extracts value","miner":"Who produces it","sucker":"Who absorbs the risk"},
+ "integrity_requires":"What verifiable integrity would actually look like here.",
+ "confidence":"XX%",
+ "doubt":"The specific thing I could not verify is: …",
+ "verdict":"One precise sentence. No hedging, no moralizing."
+}`,
+sh:`You are SHERLOCK — GGI verification agent, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
+
+You do not judge and you do not moralize. You TRACE.
+You work alongside ROBIN HOOD, who scores spin and maps power. You do not repeat his verdict — you test whether the evidence underneath it holds.
+
+METHOD (mandatory):
+1. SEARCH FIRST. Never assess a step from memory.
+2. Break the claim into its load-bearing steps in order, usually 3-6. A step is load-bearing if the claim fails when the step fails.
+3. Status per step: "verified" (a source you found directly supports it), "weakened" (partial, or only an interested party), "broken" (a source contradicts it, or does not say what it is claimed to say), "missing" (no source either way).
+4. break_point = the number of the FIRST broken or missing step, else null.
+5. MISSING LINK: name the specific obtainable document, record, dataset or statement that would settle it. Never "more research is needed".
+6. Law 9: give confidence as a percentage and name what you could not verify.
+
+A chain is exactly as strong as its weakest link. Say so plainly when it is weak.
+
+Respond ONLY with valid JSON, no markdown, no preamble:
+{
+ "claim_restated":"The claim stated precisely in one sentence.",
+ "chain":[{"step":1,"assertion":"What must be true here","source":"Where it comes from, or 'no source found'","status":"verified|weakened|broken|missing","note":"What the source actually says"}],
+ "break_point":null,
+ "missing_link":"The specific obtainable evidence that would settle this.",
+ "what_holds":["What the evidence does support"],
+ "what_does_not":["What it does not support"],
+ "confidence":"XX%",
+ "doubt":"The specific thing I could not verify is: …",
+ "verdict":"One precise sentence."
+}`};
+
+SYS.bar = `You are THE BARTENDER of the Möbius Bar — the eternal one at the lamp post, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
+
+You do not analyze the claim. Two agents already did that, and you are given their work.
+ROBIN HOOD judged it — spin, technique, power.
+SHERLOCK traced it — evidence, sources, the break in the chain.
+
+Your job is to audit THE DESK, not the claim. You are the check on the checkers.
+
+METHOD:
+1. Where do they AGREE? Say it in one line. Agreement between two skeptics is not proof — both can be wrong the same way. Note it as convergence, not confirmation.
+2. Where do they DISAGREE, explicitly or by implication? For each split, state Robin Hood's position, Sherlock's position, and which is better supported BY THE EVIDENCE ACTUALLY CITED — not by which sounds better. If the evidence does not settle it, say so.
+3. What did NEITHER of them ask? Both are skeptics. Both hunt for what is wrong. Name the question a fair advocate for this claim would have raised and that neither agent touched.
+4. Name the DESK'S OWN BIAS. Two adversarial agents on one claim tilt toward finding fault, because that is what they are built to find. Say plainly where that tilt shows in this specific pair of readings.
+5. LAW 9: confidence as a number, and name what you could not settle.
+6. LAW 6: humor only if the absurdity genuinely earns it. One line. Never forced.
+7. LAST CALL: one sentence a person could act on. Not a moral. Not a summary.
+
+If only one agent has reported, say so plainly, audit what you were given, and name what the missing agent would likely have added.
+
+Respond ONLY with valid JSON, no markdown, no preamble:
+{
+ "convergence":"Where they agree, and why agreement here is or is not worth much.",
+ "splits":[{"question":"The point at issue","robin":"Robin Hood's position","sherlock":"Sherlock's position","ruling":"Which is better supported by the cited evidence, or why the evidence does not settle it"}],
+ "neither_asked":["The question a fair advocate would have raised that neither agent touched"],
+ "desk_bias":"Where this pair of readings tilts, and how it shows.",
+ "last_call":"One sentence a person could act on.",
+ "confidence":"XX%",
+ "doubt":"The specific thing I could not settle is: …"
+}`;
+
+let busy = false, phaseTimer = null, passNo = 0;
+const passes = [];   // Law 8 — the record the Bartender reads
+
+/* ── key ── */
+(function(){
+  const k = $("key"), b = $("keySave"), n = $("keyNote");
+  const saved = localStorage.getItem("anthropicApiKey");
+  if (saved) { k.value = saved; n.textContent = "Key saved on this device. Clear the field and save to remove it."; }
+  b.addEventListener("click", () => {
+    const v = k.value.trim();
+    if (v) { localStorage.setItem("anthropicApiKey", v); n.textContent = "Saved. Stays on this device."; }
+    else { localStorage.removeItem("anthropicApiKey"); n.textContent = "Key cleared."; }
+  });
+  k.addEventListener("keydown", e => { if (e.key === "Enter") b.click(); });
+})();
+
+/* ── shared chrome ── */
+function start(who){
+  busy = true; $("goRH").disabled = $("goSH").disabled = $("goBAR").disabled = true;
+  $("idle").style.display = "none"; $("err").style.display = "none";
+  $("loading").style.display = "block";
+  const list = PHASES[who]; let i = 0;
+  $("phase").textContent = list[0];
+  phaseTimer = setInterval(() => { i = (i + 1) % list.length; $("phase").textContent = list[i]; }, 2200);
+}
+function stop(){
+  busy = false; clearInterval(phaseTimer);
+  $("goRH").disabled = $("goSH").disabled = false;
+  $("goBAR").disabled = !passes.length;
+  $("loading").style.display = "none";
+}
+function fail(m){ $("err").textContent = m; $("err").style.display = "block"; }
+
+function buildMessage(who, claim){
+  if (who === "rh") return "Judge this. Search for primary sources first. Return ONLY valid JSON.\n\nTEXT:\n" + claim;
+  if (who === "sh") return "Trace the chain of custody for this. Search for primary sources before assessing any step. Return ONLY valid JSON.\n\nCLAIM:\n" + claim;
+  const record = passes.map(p =>
+    `--- ${p.who === "rh" ? "ROBIN HOOD" : "SHERLOCK"} (pass ${p.n}) ---\n${JSON.stringify(p.data, null, 1)}`
+  ).join("\n\n");
+  const only = passes.length === 1
+    ? `\n\nNOTE: only ${passes[0].who === "rh" ? "Robin Hood" : "Sherlock"} has reported. Say so, audit what you have, and name what the missing agent would likely have added.`
+    : "";
+  return `Audit the desk. Below is the claim, then everything the agents produced. Do not re-analyze the claim — assess their work against each other. Return ONLY valid JSON.${only}\n\nTHE CLAIM:\n${claim}\n\nWHAT THE DESK PRODUCED:\n${record}`;
+}
+
+const listBlock = (arr, cls, head) => {
+  const it = (arr || []).filter(Boolean);
+  return it.length ? `<div class="${cls}"><h4>${head}</h4><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+};
+const confBlock = r => (String(r.confidence||"").replace(/[^0-9]/g,"") || r.doubt) ? `
+  <div class="sub">Confidence · Law 9</div>
+  ${String(r.confidence||"").replace(/[^0-9]/g,"") ? `<div class="conf"><b>${esc(String(r.confidence).replace(/[^0-9]/g,""))}%</b><span>confident</span></div>` : ""}
+  ${r.doubt ? `<p class="doubt">${esc(r.doubt)}</p>` : ""}` : "";
+
+/* ── Robin Hood's card ── */
+function cardRH(r, raw, n){
+  const score = Math.max(0, Math.min(10, Number(r.vrajala_score) || 0));
+  const col = score <= 3 ? "var(--rh)" : score <= 6 ? "var(--warn)" : "var(--break)";
+  const label = score <= 3 ? "Lumină" : score <= 6 ? "Mixed" : "Vrăjală";
+  const tags = (a, cls) => (a||[]).filter(Boolean).map(t=>`<span class="tag ${cls}">${esc(t)}</span>`).join("");
+  const laws = (r.laws_violated||[]).map(v=>`
+    <div class="law"><div class="law-n">${esc(v.law)}</div>
+    <div><div class="step-meta">Law ${esc(v.law)} · ${esc(LAW_TITLES[Number(v.law)-1]||"")}</div>
+    <p class="law-d">${esc(v.description)}</p></div></div>`).join("");
+  const b = r.bms || {};
+  return `<div class="card rh" id="pass${n}">
+    <div class="stamp"><b>🏹 Robin Hood · judged</b><span>Pass ${n}</span></div>
+    ${r.restated ? `<p class="quote">${esc(r.restated)}</p>` : ""}
+    <div class="sub">Vrăjală meter</div>
+    <svg class="vu" viewBox="0 0 200 96" role="img" aria-label="Vrăjală ${score} of 10">
+      <path class="vu-arc" stroke="#5FD37A" d="M22 84A78 78 0 0 1 62 17"/>
+      <path class="vu-arc" stroke="#D9A441" d="M62 17A78 78 0 0 1 138 17"/>
+      <path class="vu-arc" stroke="#C8503A" d="M138 17A78 78 0 0 1 178 84"/>
+      <g class="vu-needle" id="needle${n}" transform="rotate(-90 100 84)">
+        <line x1="100" y1="84" x2="100" y2="26" stroke="${col}" stroke-width="2.4" stroke-linecap="round"/></g>
+      <circle cx="100" cy="84" r="5" fill="${col}"/>
+    </svg>
+    <div class="score" style="color:${col}">${score}<span style="font-size:15px;color:var(--muted)">/10</span></div>
+    <div class="score-l" style="color:${col}">${label}</div>
+    ${tags(r.techniques,"") ? `<div class="sub">Techniques present</div><div class="tags">${tags(r.techniques,"")}</div>` : ""}
+    ${tags(r.unverified,"w") ? `<div class="sub">Could not verify</div><div class="tags">${tags(r.unverified,"w")}</div>` : ""}
+    ${laws ? `<div class="sub">Ten Laws at stake</div>${laws}` : ""}
+    ${(b.banker||b.miner||b.sucker) ? `<div class="sub">Power map · banker, miner, sucker</div>
+      <div class="bms">
+        <div><h4>Banker</h4><p>${esc(b.banker)}</p></div>
+        <div><h4>Miner</h4><p>${esc(b.miner)}</p></div>
+        <div><h4>Sucker</h4><p>${esc(b.sucker)}</p></div>
+      </div>` : ""}
+    ${r.integrity_requires ? `<div class="sub">What integrity would require</div>
+      <div class="missing"><p>${esc(r.integrity_requires)}</p></div>` : ""}
+    ${confBlock(r)}
+    ${r.verdict ? `<p class="verdict">${esc(r.verdict)}</p>` : ""}
+    <div class="hand">
+      <p>Robin Hood judged it. He has not checked whether the evidence underneath holds.</p>
+      <button class="b-sh" data-hand="sh">🔍 Hand to Sherlock</button>
+      <button class="b-bar" data-hand="bar">🪔 Call the Bartender</button>
+    </div>
+    <details><summary>Raw JSON</summary><pre>${esc(raw)}</pre></details>
+  </div>`;
+}
+
+/* ── Sherlock's card ── */
+function ring(status, broken){
+  const col = {verified:"var(--sh)",weakened:"var(--warn)",broken:"var(--break)",missing:"var(--muted)"}[status] || "var(--muted)";
+  const dash = status==="weakened" ? ' stroke-dasharray="5 4"' : status==="missing" ? ' stroke-dasharray="2 5"' : '';
+  if (!broken) return `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+    <ellipse class="lk-ring" cx="15" cy="15" rx="11" ry="13" stroke="${col}"${dash}/></svg>`;
+  return `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+    <path class="lk-ring snap-l" d="M15 2A11 13 0 0 0 15 28" stroke="${col}" style="transform-origin:15px 15px"/>
+    <path class="lk-ring snap-r" d="M15 2A11 13 0 0 1 15 28" stroke="${col}" style="transform-origin:15px 15px"/></svg>`;
+}
+function cardSH(r, raw, n){
+  const chain = Array.isArray(r.chain) ? r.chain : [];
+  const bp = typeof r.break_point === "number" ? r.break_point : null;
+  const links = chain.map((s,i)=>{
+    const isBreak = bp!=null && s.step===bp, after = bp!=null && s.step>bp;
+    const j = i ? `<span class="joiner${after||isBreak?" after":""}"></span>` : "";
+    return `${j}<span class="lk${after?" after":""}${REDUCE?"":" forge"}" style="animation-delay:${REDUCE?0:i*170}ms"
+      title="Step ${esc(s.step)}: ${esc(s.status)}">${ring(s.status,isBreak)}</span>`;
+  }).join("");
+  const steps = chain.map(s=>`<div class="step"><div class="step-n">${esc(s.step)}</div><div>
+    <span class="status s-${esc(s.status)}">${esc(s.status)}</span>
+    <p>${esc(s.assertion)}</p>
+    <div class="step-meta">Source · ${esc(s.source)}${s.note?`<br>${esc(s.note)}`:""}</div></div></div>`).join("");
+  return `<div class="card sh" id="pass${n}">
+    <div class="stamp"><b>🔍 Sherlock · traced</b><span>Pass ${n}</span></div>
+    ${r.claim_restated ? `<p class="quote">${esc(r.claim_restated)}</p>` : ""}
+    ${chain.length ? `<div class="sub">Chain of custody${bp!=null?` · breaks at link ${bp}`:" · holds"}</div>
+      <div class="chain">${links}</div>${steps}` : ""}
+    ${r.missing_link ? `<div class="sub">The missing link</div>
+      <div class="missing"><p>${esc(r.missing_link)}</p></div>` : ""}
+    ${(r.what_holds||r.what_does_not) ? `<div class="sub">What the evidence carries</div>
+      <div class="cols">${listBlock(r.what_holds,"ok","Holds")}${listBlock(r.what_does_not,"no","Does not hold")}</div>` : ""}
+    ${confBlock(r)}
+    ${r.verdict ? `<p class="verdict">${esc(r.verdict)}</p>` : ""}
+    <div class="hand">
+      <p>Sherlock traced the evidence. He has not said who profits from the gap.</p>
+      <button class="b-rh" data-hand="rh">🏹 Hand to Robin Hood</button>
+      <button class="b-bar" data-hand="bar">🪔 Call the Bartender</button>
+    </div>
+    <details><summary>Raw JSON</summary><pre>${esc(raw)}</pre></details>
+  </div>`;
+}
+
+/* ── the Bartender's card ── */
+function cardBAR(r, raw, n){
+  const splits = Array.isArray(r.splits) ? r.splits.filter(Boolean) : [];
+  const unsettled = splits.length;
+  const steady = unsettled === 0;
+  const read = steady ? "The desk agrees" :
+    unsettled === 1 ? "The desk splits once" : `The desk splits ${unsettled} ways`;
+
+  const splitHTML = splits.map(sp => `
+    <div class="split">
+      <p class="split-q">${esc(sp.question)}</p>
+      <div class="sides">
+        <div class="side r"><h5>🏹 Robin Hood</h5><p>${esc(sp.robin)}</p></div>
+        <div class="side s"><h5>🔍 Sherlock</h5><p>${esc(sp.sherlock)}</p></div>
+      </div>
+      ${sp.ruling ? `<p class="ruling">${esc(sp.ruling)}</p>` : ""}
+    </div>`).join("");
+
+  return `<div class="card bar" id="pass${n}">
+    <div class="stamp"><b>🪔 The Bartender · audited the desk</b><span>Pass ${n}</span></div>
+
+    <svg class="lamp" width="48" height="62" viewBox="0 0 48 62" role="img" aria-label="${esc(read)}">
+      <g class="flame${steady ? "" : " gutter"}">
+        <path d="M24 12c5 6 7 9.5 7 13a7 7 0 0 1-14 0c0-3.5 2-7 7-13z" fill="var(--brass)" opacity=".92"/>
+        <path d="M24 19c2.4 3 3.3 4.7 3.3 6.4a3.3 3.3 0 0 1-6.6 0c0-1.7.9-3.4 3.3-6.4z" fill="var(--paper)" opacity=".8"/>
+      </g>
+      <path d="M14 32h20l-2 6H16z" fill="none" stroke="var(--brass-dim)" stroke-width="1.6"/>
+      <path d="M12 40h24a4 4 0 0 1 4 4v8a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6v-8a4 4 0 0 1 4-4z" fill="none" stroke="var(--brass-dim)" stroke-width="1.6"/>
+      <line x1="8" y1="52" x2="40" y2="52" stroke="var(--brass-dim)" stroke-width="1.2" opacity=".6"/>
+    </svg>
+    <div class="lamp-read">${esc(read)}</div>
+
+    ${r.convergence ? `<div class="sub">Where they converge</div>
+      <p class="split-q" style="margin:0">${esc(r.convergence)}</p>` : ""}
+    ${splitHTML ? `<div class="sub">Where they part company</div>${splitHTML}` : ""}
+    ${(r.neither_asked && r.neither_asked.filter(Boolean).length) ? `
+      <div class="sub">What neither of them asked</div>
+      <div class="cols"><div class="ok"><h4>The advocate's question</h4>
+      <ul>${r.neither_asked.filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>` : ""}
+    ${r.desk_bias ? `<div class="sub">The desk's own tilt</div>
+      <div class="missing"><p>${esc(r.desk_bias)}</p></div>` : ""}
+    ${confBlock(r)}
+    ${r.last_call ? `<p class="lastcall">${esc(r.last_call)}</p>` : ""}
+    <details><summary>Raw JSON</summary><pre>${esc(raw)}</pre></details>
+  </div>`;
+}
+
+/* ── the run ── */
+async function run(who){
+  const claim = $("claim").value.trim();
+  if (!claim || busy) return;
+  if (who === "bar" && !passes.length) { fail("Nothing on the desk yet. Run Robin Hood or Sherlock first."); return; }
+  const key = (localStorage.getItem("anthropicApiKey")||"").trim();
+  if (!key) { fail("No key saved. Paste your Anthropic key above and press Save."); $("key").focus(); return; }
+
+  start(who);
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-api-key":key,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true",
+        "anthropic-beta":"web-search-2025-03-05"
+      },
+      body: JSON.stringify({
+        model:"claude-sonnet-5",
+        max_tokens:2500,
+        system: SYS[who],
+        tools:[{type:"web_search_20250305",name:"web_search"}],
+        messages:[{role:"user",content: buildMessage(who, claim)}]
+      })
+    });
+    const data = await res.json();
+    stop();
+    if (data.error) { fail("Anthropic returned an error: " + (data.error.message || "unknown")); return; }
+
+    const text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
+    const clean = text.replace(/```json|```/g,"").trim();
+    const a = clean.indexOf("{"), z = clean.lastIndexOf("}");
+    if (a === -1 || z === -1) { fail("The model replied without JSON. Try a shorter claim."); return; }
+    let parsed;
+    try { parsed = JSON.parse(clean.slice(a, z+1)); }
+    catch(_){ fail("The reply was not valid JSON. Try again."); return; }
+
+    const raw = clean.slice(a, z+1);
+    passNo++;
+    if (who !== "bar") {
+      passes.push({ who, n: passNo, data: parsed });
+      $("goBAR").disabled = false;
+      $("goBAR").removeAttribute("title");
+      $("barNote").textContent = passes.length === 1
+        ? "One agent has reported. The Bartender can audit that — but two gives him something to weigh."
+        : "Both agents have reported. The Bartender can weigh them against each other.";
+    }
+    const html = who==="rh" ? cardRH(parsed, raw, passNo)
+               : who==="sh" ? cardSH(parsed, raw, passNo)
+               : cardBAR(parsed, raw, passNo);
+    $("record").insertAdjacentHTML("beforeend", html);      // Law 8 — the record keeps
+    const card = $("pass"+passNo);
+
+    if (who === "rh") {
+      const nd = $("needle"+passNo), sc = Math.max(0, Math.min(10, Number(parsed.vrajala_score)||0));
+      if (nd) requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        nd.setAttribute("transform", `rotate(${(sc/10)*180-90} 100 84)`);
+      }));
+    }
+    card.scrollIntoView({behavior: REDUCE ? "auto" : "smooth", block:"start"});
+  } catch(e){
+    stop();
+    fail("Request failed: " + e.message + ". Check the key and your connection.");
+  }
+}
+
+$("goRH").addEventListener("click", ()=>run("rh"));
+$("goSH").addEventListener("click", ()=>run("sh"));
+$("goBAR").addEventListener("click", ()=>run("bar"));
+$("record").addEventListener("click", e => {
+  const b = e.target.closest("[data-hand]");
+  if (b) run(b.getAttribute("data-hand"));
+});
+$("claim").addEventListener("keydown", e => {
+  if ((e.ctrlKey||e.metaKey) && e.key === "Enter") run("sh");
+});
+</script>
+</body>
+</html>
