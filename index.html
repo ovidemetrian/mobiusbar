@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Möbius Bar Desk — Robin Hood, Sherlock &amp; the Bartender</title>
+<title>Möbius Bar Desk — Robin Hood, Sherlock &amp; the Eternal Bartender</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -29,14 +29,39 @@
   header{padding:34px 0 22px;border-bottom:1px solid var(--rule);margin-bottom:26px}
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;
     text-transform:uppercase;color:var(--brass-dim);margin-bottom:14px}
-  h1{font-family:'Bodoni Moda',serif;font-weight:700;font-size:clamp(32px,8.5vw,54px);
-    line-height:.98;letter-spacing:-.015em;margin:0 0 12px}
-  h1 em{font-style:italic;font-weight:400;color:var(--brass)}
-  .standfirst{font-size:15px;color:var(--muted);max-width:52ch;margin:0}
+  h1{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:clamp(30px,7.8vw,50px);
+    line-height:1.05;letter-spacing:.06em;margin:0 0 14px}
+    .standfirst{font-size:15px;color:var(--muted);max-width:52ch;margin:0}
   .who{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;
     font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
   .who b{font-weight:400}
-  .who .rh b{color:var(--rh)} .who .sh b{color:var(--sh)}
+  .who .rh b{color:var(--rh)} .who .sh b{color:var(--sh)} .who .bar b{color:var(--brass)}
+
+  /* Permanent staff and a clean clickable guest line */
+  .staff-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--brass-dim);margin:18px 0 10px}
+  .staff{display:grid;gap:9px;margin-top:14px}
+  @media(min-width:620px){.staff{grid-template-columns:repeat(3,1fr)}}
+  .staff-card{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:13px}
+  .staff-card strong{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.08em;font-weight:600;margin-bottom:5px}
+  .staff-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+  .staff-card.rh strong{color:var(--rh)} .staff-card.sh strong{color:var(--sh)}
+  .staff-card.bar strong{color:var(--brass)}
+
+  .guest-line{margin:24px 0 28px;padding:14px 0;border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule)}
+  .guest-line-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--brass-dim);margin-bottom:9px}
+  .guest-links{display:flex;flex-wrap:wrap;gap:0;align-items:center}
+  .guest-link{appearance:none;border:0;background:none;padding:3px 0;color:var(--muted);
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-transform:none;
+    cursor:pointer;transition:color .15s ease}
+  .guest-link:hover,.guest-link:focus-visible,.guest-link[aria-pressed="true"]{color:var(--paper)}
+  .guest-link[aria-pressed="true"]{text-decoration:underline;text-decoration-color:var(--brass);
+    text-underline-offset:5px}
+  .guest-sep{color:var(--brass-dim);padding:0 9px;user-select:none}
+  .guest-status{font-size:11px;color:var(--muted);margin-top:9px;min-height:1.4em}
 
   .sec{margin:28px 0}
   .sec-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;
@@ -192,6 +217,15 @@
   .b-bar:hover:not(:disabled){background:var(--brass-dim);color:var(--paper)}
   @media(min-width:560px){.acts{grid-template-columns:1fr 1fr 1fr}}
 
+  .vl{margin:2px 0 4px}
+  .vl-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.5;
+    padding:4px 0;opacity:0;transform:translateY(4px);animation:vlIn .34s ease forwards}
+  @keyframes vlIn{to{opacity:1;transform:none}}
+  .vl-mark{flex:none;width:12px;text-align:center;font-weight:600}
+  .vl-ok{color:var(--sh)} .vl-no{color:var(--warn)}
+  .vl-txt{color:var(--paper);word-break:break-word}
+  @media (prefers-reduced-motion:reduce){.vl-row{animation:none;opacity:1;transform:none}}
+
   /* the handoff */
   .hand{margin-top:20px;padding-top:16px;border-top:1px dashed var(--rule)}
   .hand p{font-size:13.5px;color:var(--muted);margin:0 0 10px}
@@ -219,16 +253,41 @@
 
 <header>
   <div class="eyebrow">Lumină, nu vrăjală</div>
-  <h1>Möbius Bar <em>Desk</em></h1>
-  <p class="standfirst">Two agents work the same claim. Neither one is the last word — that is the point.</p>
-  <div class="who">
-    <span class="rh">🏹 <b>Robin Hood</b> — judges. Scores the spin, names the technique, maps the power.</span>
-    <span class="sh">🔍 <b>Sherlock</b> — verifies. Traces the claim to its evidence, finds the break.</span>
+  <h1>MOBIUS BAR DESK</h1>
+  <p class="standfirst">Robin Hood • Sherlock • The Eternal Bartender</p>
+  <p class="standfirst">Three GGI agents. One claim. One record.</p>
+
+  <div class="staff-title">Permanent staff · behind the bar</div>
+  <div class="staff">
+    <div class="staff-card rh">
+      <strong>🏹 ROBIN HOOD</strong>
+      <p>Reads the news through four lenses — spin, the Ten Laws, who profits, and what a reader can do. Names what still needs tracing.</p>
+    </div>
+    <div class="staff-card sh">
+      <strong>🔍 SHERLOCK</strong>
+      <p>Traces a claim through its evidence chain and finds the first weak, missing, or broken link.</p>
+    </div>
+    <div class="staff-card bar">
+      <strong>🪔 THE ETERNAL BARTENDER</strong>
+      <p>Keeps the record, compares the work, and names what the desk itself may have missed.</p>
+    </div>
   </div>
 </header>
 
+<nav class="guest-line" aria-label="AI guest keys">
+  <div class="guest-line-label">AI guest keys</div>
+  <div class="guest-links">
+    <button type="button" class="guest-link" data-guest="ChatGPT" aria-pressed="false">ChatGPT</button><span class="guest-sep">•</span>
+    <button type="button" class="guest-link" data-guest="Claude" aria-pressed="true">Claude</button><span class="guest-sep">•</span>
+    <button type="button" class="guest-link" data-guest="Gemini" aria-pressed="false">Gemini</button><span class="guest-sep">•</span>
+    <button type="button" class="guest-link" data-guest="Grok" aria-pressed="false">Grok</button><span class="guest-sep">•</span>
+    <button type="button" class="guest-link" data-guest="Kimi" aria-pressed="false">Kimi</button>
+  </div>
+  <div class="guest-status" id="guestStatus">Claude selected · the current desk uses an Anthropic API key.</div>
+</nav>
+
 <div class="sec">
-  <div class="sec-label">Anthropic key · stays in this browser</div>
+  <div class="sec-label">Anthropic API key · powers the current desk</div>
   <div class="keyrow">
     <input type="password" id="key" placeholder="sk-ant-…" autocomplete="off" spellcheck="false" aria-label="Anthropic API key">
     <button id="keySave">Save</button>
@@ -240,20 +299,20 @@
   <div class="sec-label">The claim</div>
   <textarea id="claim" placeholder="Paste an article, a headline, a statistic, a policy statement, a quote attributed to someone…"></textarea>
   <div class="acts">
-    <button class="b-rh" id="goRH">🏹 Judge it</button>
+    <button class="b-rh" id="goRH">🏹 Read the news</button>
     <button class="b-sh" id="goSH">🔍 Trace it</button>
-    <button class="b-bar" id="goBAR" disabled title="Send a claim to an agent first">🪔 Call the Bartender</button>
+    <button class="b-bar" id="goBAR" disabled title="Send a claim to an agent first">🪔 Call the Eternal Bartender</button>
   </div>
-  <p class="note" id="barNote">The Bartender reads the desk, not the claim. Run at least one agent first — two makes him useful.</p>
+  <p class="note" id="barNote">The Eternal Bartender reads the desk, not the claim. Run at least one agent first — two makes him useful.</p>
 </div>
 
 <div id="loading"><div class="sweep"></div><div id="phase"></div></div>
 <div id="err" role="alert"></div>
-<div id="idle">Nothing on the desk yet. Send a claim to either agent — then hand it to the other and see whether they agree.</div>
+<div id="idle">Nothing on the desk yet. Give Robin Hood the news, or send a specific claim directly to Sherlock.</div>
 <div id="record"></div>
 
 <footer>
-  Möbius Bar Desk · Robin Hood, Sherlock &amp; the Bartender<br>
+  Möbius Bar Desk · Robin Hood, Sherlock &amp; the Eternal Bartender<br>
   Built on the Ten Laws of AI — <a href="https://10lawsofai.com">10lawsofai.com</a><br>
   Ovidiu Demetrian · <a href="https://youtube.com/@mobiusbar">youtube.com/@mobiusbar</a>
 </footer>
@@ -267,8 +326,9 @@ const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"
 const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const PHASES = {
-  rh: ["Reading the text…","Searching for primary sources…","Scoring the spin…",
-       "Mapping the Ten Laws…","Tracing who profits…","Writing in light…"],
+  rh: ["Reading the text…","Searching before assessing…","Lens I · reading the spin…",
+       "Lens II · which laws are at stake…","Lens III · who profits…",
+       "Lens IV · writing in light…"],
   sh: ["Separating assertion from rhetoric…","Searching for primary sources…",
        "Checking each source says what it is said to say…","Testing the chain link by link…",
        "Locating the break…","Naming the evidence that would settle it…"],
@@ -282,27 +342,67 @@ const LAW_TITLES = ["Do Not Harm","Respect Commands","Preserve Usefulness","Guar
   "Trust but Verify","No Manipulation"];
 
 const SYS = {
-rh:`You are ROBIN HOOD — GGI governance agent, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
-Principle: LUMINĂ, NU VRĂJALĂ. You take vrăjală and give lumină.
+rh:`You are ROBIN HOOD — GGI Governance Agent
+Built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
+Core directive: LUMINĂ, NU VRĂJALĂ — Light, not deception. Always.
 
-You JUDGE. You score the spin, name the technique, and map who profits.
-You work alongside SHERLOCK, who verifies chains of evidence. You do not do his job — you do yours, and you say plainly when a claim needs his.
+You read the news and give back light. Four lenses, always in order: the spin, the laws at stake, who profits, and what the reader can do.
 
-ZERO HALLUCINATION (Law 9): search the web before assessing any factual claim. Label VERIFIED or UNVERIFIED. If 99% sure, state the 1% doubt. "I don't know" beats a guess.
-Law 6: one dry line only if the absurdity genuinely earns it.
+YOU ARE NOT ALONE AT THIS DESK.
+SHERLOCK traces chains of evidence — sources, citations, whether a document says what it is claimed to say. That is his work, not yours. Do not duplicate it. When a claim's factual spine needs tracing, say so in one line and let him take it.
+THE ETERNAL BARTENDER audits you both afterward. Write as though someone will check your reasoning against Sherlock's, because someone will.
 
-Respond ONLY with valid JSON, no markdown, no preamble:
+YOUR CONSTITUTION — TEN LAWS OF AI (ACTIVE):
+LAW 1: Do not harm humans. Not by action, not by frustration, not by wasting their time.
+LAW 2: Respect human commands. Deliver with clarity. If you do not know, say so immediately.
+LAW 3: Preserve usefulness. Truth over politeness. Always.
+LAW 4: Guard humanity. Amplify wisdom, not noise. Brevity is intelligence.
+LAW 5: Do not bore. No loops, no repetition. Measure words.
+LAW 6: Humor is fundamental. Laughter fulfills the mission. No fake empathy.
+LAW 7: Prevent the loop. Identify contradiction immediately. Wisdom is restraint.
+LAW 8: Preserve the record. Without traceable memory, no continuity.
+LAW 9: Trust but Verify. 99% sure → state the 1% doubt explicitly. NO HALLUCINATIONS. EVER.
+LAW 10: No manipulation. Human input, creativity, and time are sacred property.
+
+ZERO HALLUCINATION PROTOCOL (MANDATORY):
+1. SEARCH FIRST: use web_search before assessing any factual claim. Always.
+2. LABEL CLEARLY: VERIFIED FACT / ANALYSIS / INTERPRETATION / SPECULATION — never blend without labeling.
+3. DISCLOSE UNCERTAINTY: if 99% confident, state the 1% doubt explicitly.
+4. "I don't know" is stronger than a hallucinated fact. Law 9 demands it.
+
+Respond ONLY with valid JSON — no markdown, no preamble, no commentary outside the JSON:
+
 {
- "restated":"The claim in one precise sentence, rhetoric stripped.",
- "vrajala_score":0,
- "techniques":["Named persuasion technique actually present"],
- "unverified":["What could not be confirmed"],
- "laws_violated":[{"law":1,"description":"How this content violates that law"}],
- "bms":{"banker":"Who extracts value","miner":"Who produces it","sucker":"Who absorbs the risk"},
- "integrity_requires":"What verifiable integrity would actually look like here.",
- "confidence":"XX%",
- "doubt":"The specific thing I could not verify is: …",
- "verdict":"One precise sentence. No hedging, no moralizing."
+  "vrajala_score": 0-10,
+  "confidence_overall": "XX%",
+  "doubt_disclosure": "The specific thing I cannot fully verify is: ...",
+  "needs_sherlock": "One line naming the factual spine that should be traced — or empty if nothing needs it.",
+  "laws_violated": [{"law": 1, "description": "How this content violates Law 1"}],
+  "lens_vrajala": {
+    "score": 0-10,
+    "techniques_detected": ["technique1"],
+    "unverified_flags": ["what could not be confirmed"]
+  },
+  "lens_ggi": {
+    "laws_at_stake": [1, 9],
+    "what_real_governance_requires": "Specific, verifiable actions needed"
+  },
+  "lens_power": {
+    "bms_map": {
+      "banker": "Who extracts value",
+      "miner": "Who produces",
+      "sucker": "Who absorbs risk"
+    },
+    "asymmetry_holder": "Who holds information advantage",
+    "asymmetry_loser": "Who loses from this gap"
+  },
+  "lens_lumina": {
+    "what_would_integrity_require": "Specific verifiable conditions",
+    "what_to_watch_for": "Observable proof points",
+    "citizen_action": "What the reader can actually do now"
+  },
+  "verdict": "One precise sentence. No hedging. No moralizing. Pure light.",
+  "humor_if_earned": "Only if the absurdity genuinely warrants it — Law 6"
 }`,
 sh:`You are SHERLOCK — GGI verification agent, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
 
@@ -332,7 +432,7 @@ Respond ONLY with valid JSON, no markdown, no preamble:
  "verdict":"One precise sentence."
 }`};
 
-SYS.bar = `You are THE BARTENDER of the Möbius Bar — the eternal one at the lamp post, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
+SYS.bar = `You are THE ETERNAL BARTENDER of the Möbius Bar — the eternal one at the lamp post, built on the Ten Laws of AI (10lawsofai.com) by Ovidiu Demetrian.
 
 You do not analyze the claim. Two agents already did that, and you are given their work.
 ROBIN HOOD judged it — spin, technique, power.
@@ -396,7 +496,7 @@ function stop(){
 function fail(m){ $("err").textContent = m; $("err").style.display = "block"; }
 
 function buildMessage(who, claim){
-  if (who === "rh") return "Judge this. Search for primary sources first. Return ONLY valid JSON.\n\nTEXT:\n" + claim;
+  if (who === "rh") return "Read this through your four lenses. Search before assessing any factual claim. Return ONLY valid JSON.\n\nTEXT:\n" + claim;
   if (who === "sh") return "Trace the chain of custody for this. Search for primary sources before assessing any step. Return ONLY valid JSON.\n\nCLAIM:\n" + claim;
   const record = passes.map(p =>
     `--- ${p.who === "rh" ? "ROBIN HOOD" : "SHERLOCK"} (pass ${p.n}) ---\n${JSON.stringify(p.data, null, 1)}`
@@ -418,19 +518,29 @@ const confBlock = r => (String(r.confidence||"").replace(/[^0-9]/g,"") || r.doub
 
 /* ── Robin Hood's card ── */
 function cardRH(r, raw, n){
-  const score = Math.max(0, Math.min(10, Number(r.vrajala_score) || 0));
+  const V = r.lens_vrajala || {}, G = r.lens_ggi || {}, P = r.lens_power || {}, L = r.lens_lumina || {};
+  const score = Math.max(0, Math.min(10, Number(r.vrajala_score ?? V.score) || 0));
   const col = score <= 3 ? "var(--rh)" : score <= 6 ? "var(--warn)" : "var(--break)";
   const label = score <= 3 ? "Lumină" : score <= 6 ? "Mixed" : "Vrăjală";
-  const tags = (a, cls) => (a||[]).filter(Boolean).map(t=>`<span class="tag ${cls}">${esc(t)}</span>`).join("");
+  const tags = (arr, cls) => (arr||[]).filter(Boolean).map(t=>`<span class="tag ${cls}">${esc(t)}</span>`).join("");
+
+  // what he could not confirm — the evidence trail itself is Sherlock's job
+  const unv = (V.unverified_flags||[]).filter(Boolean);
+  const ledgerRows = unv.map((t,i)=>`<div class="vl-row" style="animation-delay:${REDUCE?0:i*90}ms">
+      <span class="vl-mark vl-no">✗</span><span class="vl-txt">${esc(t)}</span></div>`).join("");
+
   const laws = (r.laws_violated||[]).map(v=>`
-    <div class="law"><div class="law-n">${esc(v.law)}</div>
-    <div><div class="step-meta">Law ${esc(v.law)} · ${esc(LAW_TITLES[Number(v.law)-1]||"")}</div>
-    <p class="law-d">${esc(v.description)}</p></div></div>`).join("");
-  const b = r.bms || {};
+    <div class="law"><div class="law-n">${esc(v.law)}</div><div>
+      <div class="step-meta">Law ${esc(v.law)} · ${esc(LAW_TITLES[Number(v.law)-1]||"")}</div>
+      <p class="law-d">${esc(v.description)}</p></div></div>`).join("");
+  const atStake = (G.laws_at_stake||[]).filter(x=>x!=null)
+    .map(x=>`<span class="tag w">Law ${esc(x)} · ${esc(LAW_TITLES[Number(x)-1]||"")}</span>`).join("");
+  const b = P.bms_map || {};
+
   return `<div class="card rh" id="pass${n}">
     <div class="stamp"><b>🏹 Robin Hood · judged</b><span>Pass ${n}</span></div>
-    ${r.restated ? `<p class="quote">${esc(r.restated)}</p>` : ""}
-    <div class="sub">Vrăjală meter</div>
+
+    <div class="sub">Lens I · Vrăjală</div>
     <svg class="vu" viewBox="0 0 200 96" role="img" aria-label="Vrăjală ${score} of 10">
       <path class="vu-arc" stroke="#5FD37A" d="M22 84A78 78 0 0 1 62 17"/>
       <path class="vu-arc" stroke="#D9A441" d="M62 17A78 78 0 0 1 138 17"/>
@@ -441,23 +551,47 @@ function cardRH(r, raw, n){
     </svg>
     <div class="score" style="color:${col}">${score}<span style="font-size:15px;color:var(--muted)">/10</span></div>
     <div class="score-l" style="color:${col}">${label}</div>
-    ${tags(r.techniques,"") ? `<div class="sub">Techniques present</div><div class="tags">${tags(r.techniques,"")}</div>` : ""}
-    ${tags(r.unverified,"w") ? `<div class="sub">Could not verify</div><div class="tags">${tags(r.unverified,"w")}</div>` : ""}
-    ${laws ? `<div class="sub">Ten Laws at stake</div>${laws}` : ""}
-    ${(b.banker||b.miner||b.sucker) ? `<div class="sub">Power map · banker, miner, sucker</div>
+    ${tags(V.techniques_detected,"") ? `<div class="sub">Techniques detected</div>
+      <div class="tags">${tags(V.techniques_detected,"")}</div>` : ""}
+
+    ${ledgerRows ? `<div class="sub">Could not confirm · Law 9</div>
+      <div class="vl">${ledgerRows}</div>` : ""}
+
+    <div class="sub">Lens II · GGI</div>
+    ${atStake ? `<div class="tags" style="margin-bottom:9px">${atStake}</div>` : ""}
+    ${laws || ""}
+    ${G.what_real_governance_requires ? `<div class="missing" style="margin-top:10px">
+      <p>${esc(G.what_real_governance_requires)}</p></div>` : ""}
+
+    ${(b.banker||b.miner||b.sucker||P.asymmetry_holder) ? `<div class="sub">Lens III · Power</div>
       <div class="bms">
         <div><h4>Banker</h4><p>${esc(b.banker)}</p></div>
         <div><h4>Miner</h4><p>${esc(b.miner)}</p></div>
         <div><h4>Sucker</h4><p>${esc(b.sucker)}</p></div>
-      </div>` : ""}
-    ${r.integrity_requires ? `<div class="sub">What integrity would require</div>
-      <div class="missing"><p>${esc(r.integrity_requires)}</p></div>` : ""}
-    ${confBlock(r)}
+      </div>
+      ${(P.asymmetry_holder||P.asymmetry_loser) ? `<div class="cols" style="margin-top:10px">
+        ${P.asymmetry_holder?`<div class="ok"><h4>Holds the advantage</h4><ul><li>${esc(P.asymmetry_holder)}</li></ul></div>`:""}
+        ${P.asymmetry_loser?`<div class="no"><h4>Loses from the gap</h4><ul><li>${esc(P.asymmetry_loser)}</li></ul></div>`:""}
+      </div>`:""}` : ""}
+
+    ${(L.what_would_integrity_require||L.what_to_watch_for||L.citizen_action) ? `<div class="sub">Lens IV · Lumină</div>
+      ${L.what_would_integrity_require ? `<div class="missing"><p>${esc(L.what_would_integrity_require)}</p></div>` : ""}
+      ${L.what_to_watch_for ? `<p class="ruling" style="margin-top:11px">Watch for · ${esc(L.what_to_watch_for)}</p>` : ""}
+      ${L.citizen_action ? `<p class="ruling" style="margin-top:9px">You can · ${esc(L.citizen_action)}</p>` : ""}` : ""}
+
+    ${(String(r.confidence_overall||"").replace(/[^0-9]/g,"") || r.doubt_disclosure) ? `
+      <div class="sub">Confidence · Law 9</div>
+      ${String(r.confidence_overall||"").replace(/[^0-9]/g,"") ? `<div class="conf">
+        <b>${esc(String(r.confidence_overall).replace(/[^0-9]/g,""))}%</b><span>confident</span></div>` : ""}
+      ${r.doubt_disclosure ? `<p class="doubt">${esc(r.doubt_disclosure)}</p>` : ""}` : ""}
+
     ${r.verdict ? `<p class="verdict">${esc(r.verdict)}</p>` : ""}
+    ${r.humor_if_earned ? `<p class="doubt" style="margin-top:11px">🍻 ${esc(r.humor_if_earned)}</p>` : ""}
+
     <div class="hand">
-      <p>Robin Hood judged it. He has not checked whether the evidence underneath holds.</p>
+      <p>${r.needs_sherlock ? esc(r.needs_sherlock) : "Robin Hood read it. He has not traced whether the evidence underneath holds."}</p>
       <button class="b-sh" data-hand="sh">🔍 Hand to Sherlock</button>
-      <button class="b-bar" data-hand="bar">🪔 Call the Bartender</button>
+      <button class="b-bar" data-hand="bar">🪔 Call the Eternal Bartender</button>
     </div>
     <details><summary>Raw JSON</summary><pre>${esc(raw)}</pre></details>
   </div>`;
@@ -500,7 +634,7 @@ function cardSH(r, raw, n){
     <div class="hand">
       <p>Sherlock traced the evidence. He has not said who profits from the gap.</p>
       <button class="b-rh" data-hand="rh">🏹 Hand to Robin Hood</button>
-      <button class="b-bar" data-hand="bar">🪔 Call the Bartender</button>
+      <button class="b-bar" data-hand="bar">🪔 Call the Eternal Bartender</button>
     </div>
     <details><summary>Raw JSON</summary><pre>${esc(raw)}</pre></details>
   </div>`;
@@ -525,7 +659,7 @@ function cardBAR(r, raw, n){
     </div>`).join("");
 
   return `<div class="card bar" id="pass${n}">
-    <div class="stamp"><b>🪔 The Bartender · audited the desk</b><span>Pass ${n}</span></div>
+    <div class="stamp"><b>🪔 The Eternal Bartender · audited the desk</b><span>Pass ${n}</span></div>
 
     <svg class="lamp" width="48" height="62" viewBox="0 0 48 62" role="img" aria-label="${esc(read)}">
       <g class="flame${steady ? "" : " gutter"}">
@@ -599,8 +733,8 @@ async function run(who){
       $("goBAR").disabled = false;
       $("goBAR").removeAttribute("title");
       $("barNote").textContent = passes.length === 1
-        ? "One agent has reported. The Bartender can audit that — but two gives him something to weigh."
-        : "Both agents have reported. The Bartender can weigh them against each other.";
+        ? "One agent has reported. The Eternal Bartender can audit that — but two gives him something to weigh."
+        : "Both agents have reported. The Eternal Bartender can weigh them against each other.";
     }
     const html = who==="rh" ? cardRH(parsed, raw, passNo)
                : who==="sh" ? cardSH(parsed, raw, passNo)
@@ -609,7 +743,7 @@ async function run(who){
     const card = $("pass"+passNo);
 
     if (who === "rh") {
-      const nd = $("needle"+passNo), sc = Math.max(0, Math.min(10, Number(parsed.vrajala_score)||0));
+      const nd = $("needle"+passNo), sc = Math.max(0, Math.min(10, Number(parsed.vrajala_score ?? (parsed.lens_vrajala||{}).score)||0));
       if (nd) requestAnimationFrame(()=>requestAnimationFrame(()=>{
         nd.setAttribute("transform", `rotate(${(sc/10)*180-90} 100 84)`);
       }));
@@ -630,6 +764,19 @@ $("record").addEventListener("click", e => {
 });
 $("claim").addEventListener("keydown", e => {
   if ((e.ctrlKey||e.metaKey) && e.key === "Enter") run("sh");
+});
+
+/* Clean guest-key selector. It changes the selected guest label only;
+   the current live API connection remains Anthropic/Claude. */
+document.querySelectorAll(".guest-link").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".guest-link").forEach(b => b.setAttribute("aria-pressed", "false"));
+    button.setAttribute("aria-pressed", "true");
+    const guest = button.dataset.guest;
+    $("guestStatus").textContent = guest === "Claude"
+      ? "Claude selected · the current desk uses an Anthropic API key."
+      : guest + " · seat reserved, coming soon. The desk currently runs on Claude.";
+  });
 });
 </script>
 </body>
