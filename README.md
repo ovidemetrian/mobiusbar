@@ -1,92 +1,54 @@
 # Möbius Bar Desk
 
-**Robin Hood • Sherlock • The Eternal Bartender**  
-**Three GGI agents. One claim. One record.**
+**Three AI agents that check each other on news and claims.**  
+*Lumină, nu vrăjeală. (Light, not deception.)*
 
-A single-page news reading and verification workspace built on Ovidiu Demetrian's **Ten Laws of AI**.
+Robin Hood · Sherlock · The Eternal Bartender
 
-> *Lumină, nu vrăjală.*  
-> Light, not deception.
+**🔗 Live:** https://ovidemetrian.github.io/mobiusbar/
 
 ---
 
 ## The Desk
 
+A single-page news reading and verification workspace built on Ovidiu Demetrian's **Ten Laws of AI**.
+
 | Agent | Role |
 |-------|------|
-| **🏹 Robin Hood** | Reads the news through four lenses — **Vrăjală** (spin scored 0–10 on a swept meter, with the techniques named), **GGI** (which of the Ten Laws are at stake or violated), **Power** (banker / miner / sucker, and who holds the information advantage), and **Lumină** (what integrity would require, what to watch for, what the reader can actually do). |
-| **🔍 Sherlock** | Traces a claim through its evidence chain, drawn as physical links. Marks each step *verified*, *weakened*, *broken*, or *missing*, identifies the first link that fails, and names the specific obtainable evidence that would settle it. |
-| **🪔 The Eternal Bartender** | Audits the two reports — not the original claim. Records where the agents converge or split, rules on which is better supported by the evidence they cited, flags what neither asked, names the desk's own bias, and ends with one actionable last call. |
+| **🏹 Robin Hood** | Reads news through four lenses: **Vrăjală** (spin 0–10 with techniques named), **GGI** (which Ten Laws are at stake), **Power** (who benefits), **Clarity** (is this claim testable?) |
+| **🔍 Sherlock** | Traces claims through evidence chains drawn as physical links. Marks each step verified/weakened/broken/missing. Identifies the first link that fails. |
+| **🪔 The Eternal Bartender** | Audits the two reports (not the original claim). Records where agents converge or split. Rules on which is better supported by evidence. Flags missing context. |
 
-The three do not overlap by design. Robin Hood judges spin and power but hands the evidence trail to Sherlock rather than duplicating it — his report names what needs tracing. Sherlock traces evidence but does not say who profits. The Bartender never sees the claim fresh; he only reads what the other two produced.
+**Why three?** Robin Hood and Sherlock are both skeptics. They can agree and be wrong together. The Bartender is the check on the checkers.
 
-Every report stays visible in the order it was made.  
-That is **Law 8: Preservation of Record**.
-
----
-
-## Why three
-
-Robin Hood and Sherlock are both skeptics. Both are built to find what is wrong, which means they can agree with each other and be wrong together. The Bartender is the check on the checkers — his lamp burns steady when they converge and gutters when they split.
-
----
-
-## AI Guests
-
-The interface reserves seats for ChatGPT, Claude, Gemini, Grok and Kimi.
-
-In this release, **Claude is the only connected provider.** The other names are visible future seats and do not pretend to be live.
+Every report stays visible in the order it was made — **Law 8: Preservation of Record**.
 
 ---
 
 ## How to Use
 
-1. Open `index.html`, or the deployed GitHub Pages URL.
-2. Paste an Anthropic API key and press **Save**.
-3. Paste news, an article, a headline, a statistic, or a specific claim.
-4. Choose:
-   - **Read the news** → Robin Hood
-   - **Trace it** → Sherlock
-   - **Call the Eternal Bartender** → enabled once at least one agent has reported
-
-Each card carries hand-off buttons, so the same claim can pass between agents without re-pasting it.
-
-**On the API key:** stored only in this browser's `localStorage` and sent directly to Anthropic. It is never sent to GitHub Pages, never logged, and never stored by this repository. Clear the field and press **Save** to remove it. Each pass is one API call, billed to you by Anthropic.
+1. **Paste your Anthropic API key** (stored in browser `localStorage`, never sent to GitHub)
+2. **Paste news, articles, headlines, statistics, or claims**
+3. **Choose your agent:**
+   - **Read the news** → Robin Hood scores spin & power
+   - **Trace it** → Sherlock builds the evidence chain
+   - **Call the Bartender** → Meta-audit (enabled after at least one agent reports)
+4. **Hand off between agents** — each card has buttons to pass claims without re-pasting
 
 ---
 
 ## Technical Details
 
-- Single `index.html` — no framework, no bundler, no build step
-- Anthropic Messages API called directly from the browser with `anthropic-dangerous-direct-browser-access`
-- Claude Sonnet with web search enabled; each agent searches before assessing
-- Responsive mobile layout, keyboard focus support, `prefers-reduced-motion` honored throughout
-- Raw JSON from every pass is kept on its card, collapsed
-
-## Repository contents
-
-| File | Purpose |
-|------|---------|
-| `index.html` | The entire application |
-| `README.md` | This file |
-| `LICENSE` | MIT — the code. The Ten Laws of AI and the GGI framework remain the author's. |
+- **Single `index.html`** — no framework, no bundler, no build step, no dependencies
+- **Anthropic Claude Sonnet** with web search enabled (each agent searches before assessing)
+- **Direct browser API calls** to Anthropic (no backend, no logging)
+- **Mobile-responsive** — full keyboard navigation, `prefers-reduced-motion` honored
+- **API key security:** Stored only in browser `localStorage`, never sent to GitHub Pages
+- **Raw JSON preserved** — collapsed JSON from every API call visible on each card
 
 ---
 
-## Deploy on GitHub Pages
-
-1. Create a new repository.
-2. Upload `index.html`, this `README.md`, and `LICENSE` to the root.
-3. **Settings → Pages**.
-4. Under **Source**, choose **Deploy from a branch**.
-5. Select `main` and `/(root)`.
-6. Save. The URL appears in the banner on that page once the build finishes — usually a minute or two.
-
-The repository name becomes part of the URL, and it is case-sensitive.
-
----
-
-## The Ten Laws of AI (short form)
+## The Ten Laws of AI (Short Form)
 
 1. Do not harm humans (including by wasting their time)
 2. Respect human commands
@@ -99,18 +61,20 @@ The repository name becomes part of the URL, and it is case-sensitive.
 9. Trust but verify
 10. No manipulation
 
-Full text and the Möbius Bar Manifesto: [10lawsofai.com](https://10lawsofai.com)
+**Full text & Möbius Bar Manifesto:** https://10lawsofai.com
 
 ---
 
-## Links
+## Also See
 
-- **Ten Laws of AI** → [10lawsofai.com](https://10lawsofai.com)
-- **Möbius Bar** → [youtube.com/@mobiusbar](https://youtube.com/@mobiusbar)
-- **Smart Homes by Ovi** → [smarthomesbyovi.com](https://smarthomesbyovi.com)
-- **Media Content Delivery** → [mediacontentdelivery.com](https://mediacontentdelivery.com)
+- **GGI Control Panel** (AGI governance framework) → https://ovidemetrian.github.io/GGI-GENIAL-GENUINE-INTELIGENCE/
+- **My Future Past** (Audio-player résumé) → https://ovidemetrian.github.io/my-future-past/
+- **NoEscape Navigator** (Dark pattern museum) → https://ovidemetrian.github.io/Netscape/
+- **YouTube Channel** → https://youtube.com/@mobiusbar
 
 ---
 
-**Built by Ovidiu Demetrian**  
-*GGI · Synthiosis · Eternal Bartender*
+**Built by Ovidiu "Ovi" Demetrian**  
+Media Content Delivery LLC · Phoenix, Arizona
+
+*One claim. Three perspectives. One record. Zero deception.*
