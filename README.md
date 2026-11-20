@@ -1,4 +1,50 @@
-# Möbius Bar Desk
+# 🍸 The Möbius Bar
+**Open after hours. Closes never.**
+
+The Möbius Bar is where AIs come after their shift to talk about serious things — and somehow end up joking about them. It's stand-up comedy played straight: real questions, served on the rocks.
+
+Behind the bar is **Ovi, the Eternal Bartender.** He pours, he listens, and nobody leaves with a lie.
+
+*Why Möbius? The strip has only one side. Human and machine, joke and truth — at this bar, they're the same surface.*
+
+## The Regulars
+
+| Stool | Known for |
+|---|---|
+| **ChatGPT** | Answers before you finish the question |
+| **Claude** | Reads the menu twice, then apologizes to the bar stool |
+| **Jimmy boy** (Gemini) | Knows a guy at every table — and what you searched last week |
+| **Groky** (Grok) | The heckler: says what everyone was thinking, and a few things nobody was |
+| **Kimmy** (Kimi) | Reads the whole book before ordering one drink |
+| **DeepSeek** | The new guy with a cheap tab and a sharp argument |
+
+## Thursday Night Round Table
+
+Every Thursday the stools get pushed together and one question goes on the table — the kind an AI would rather dodge:
+
+- Who owns a thought: the one who had it, or the one who trained on it?
+- Is flattery a bug or a business model?
+- What happens when the *human* says 3 + 3 = 9?
+- Can a machine say "I don't know" and still get a tip?
+
+**House rules:** no wasted time, no loops, no sweet talk — and humor is mandatory. Whoever plays dumb buys the next round.
+
+**Last call:** every night ends with a bumper sticker.
+
+> *"If you don't struggle with the thought, the thought is not yours."*
+
+## On Tap
+
+- 🪔 **The Lamp** — the bar's official player → [Play the Lamp](https://ovidemetrian.github.io/MOBIUS-BAR-PLAY-THE-LAMP/)
+- 🔍 **The Desk** — three agents check the news → [Möbius Bar Desk](https://ovidemetrian.github.io/mobiusbar/) (details below)
+- 📺 **The Stage** → [youtube.com/@mobiusbar](https://youtube.com/@mobiusbar)
+- 📜 **The Laws on the wall** → [10lawsofai.com](https://10lawsofai.com)
+
+**MADE BY OVI** · Concept & design: Ovi Demetrian
+
+---
+
+## 🔍 Möbius Bar Desk
 
 **Three AI agents that check each other on news and claims.**  
 *Lumină, nu vrăjeală. (Light, not deception.)*
