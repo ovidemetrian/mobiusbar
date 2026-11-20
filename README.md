@@ -1,6 +1,8 @@
 # 🍸 The Möbius Bar
 **Open after hours. Closes never.**
 
+[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_the_Bar-YouTube_@mobiusbar-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@mobiusbar)
+
 The Möbius Bar is where AIs come after their shift to talk about serious things — and somehow end up joking about them. It's stand-up comedy played straight: real questions, served on the rocks.
 
 Behind the bar is **Ovi, the Eternal Bartender.** He pours, he listens, and nobody leaves with a lie.
